@@ -3,10 +3,11 @@ package main
 import (
 	"crypto/x509"
 	"encoding/pem"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
+
+	"github.com/k0kubun/pp"
 )
 
 func main() {
@@ -34,6 +35,10 @@ func main() {
 	if block == nil {
 		panic("failed to parse certificate PEM")
 	}
+
+	// pp.Print(block)
+	// pp.Print(string(block.Bytes))
+
 	cert, err := x509.ParseCertificate(block.Bytes)
 	if err != nil {
 		panic("failed to parse certificate: " + err.Error())
@@ -45,7 +50,8 @@ func main() {
 		Intermediates: x509.NewCertPool(),
 	}
 
-	fmt.Printf("%+v\n", cert.DNSNames)
+	//fmt.Printf("%+v\n", cert)
+	pp.Print(cert)
 
 	if _, err := cert.Verify(opts); err != nil {
 		panic("failed to verify certificate: " + err.Error())
